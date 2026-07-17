@@ -212,14 +212,28 @@
   .bla-theme .url-preview{ background: rgba(96,103,112,.08); border-color: rgba(96,103,112,.25); color: var(--fb-gray-dark); }
   .url-preview svg{ flex:0 0 auto; width:14px; height:14px; margin-top:2px; }
   .url-preview code{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--text-900); font-weight:600; }
-  .bla-note{
-    margin-top: var(--space-5); display:flex; gap: var(--space-3);
-    background: rgba(96,103,112,.1); border: 1px solid rgba(96,103,112,.22); color: var(--fb-gray-dark);
-    border-radius: var(--radius-md); padding: var(--space-4) var(--space-5); font-size: 13px; line-height: 1.6;
-    backdrop-filter: blur(10px);
+  /* ---------- EPIC search tab (purple theme) ---------- */
+  .tab-btn.tab-epic{ background: rgba(147,51,234,.14); color: #7e22ce; }
+  .tab-btn.tab-epic:hover{ background: rgba(147,51,234,.22); }
+  .tab-btn[aria-selected="true"].tab-epic{ background: #9333ea; color:#fff; box-shadow: 0 8px 20px rgba(147,51,234,.35); }
+  .tab-btn[aria-selected="true"].tab-epic:hover{ background: #7e22ce; }
+  .tab-panel.epic-theme .section-heading .icon-badge{ background: rgba(147,51,234,.16); color:#7e22ce; border-color: rgba(147,51,234,.2); }
+  .epic-theme .results-meta b{ color:#7e22ce; }
+  .epic-theme tbody tr:hover td{ background: rgba(147,51,234,.07); }
+  .text-input{
+    width:100%; padding: 11px 14px; border: 1px solid rgba(120,140,180,.4); border-radius: var(--radius-sm);
+    font-size: 14px; font-family: var(--font); background: rgba(255,255,255,.92); color: var(--text-900); font-weight:600;
+    transition: border-color .15s ease, box-shadow .15s ease;
   }
-  .bla-note svg{ flex:0 0 auto; margin-top:2px; }
-  .bla-note code{ background: rgba(255,255,255,.75); padding:1px 5px; border-radius:4px; font-size:11.5px; }
+  .text-input:hover{ border-color: var(--fb-blue); }
+  .text-input:focus-visible{ border-color: var(--fb-blue); box-shadow: 0 0 0 4px var(--fb-blue-light); outline:none; }
+  .epic-theme .text-input:focus-visible{ border-color: #9333ea; box-shadow: 0 0 0 4px rgba(147,51,234,.14); }
+  .btn-primary{ background:#9333ea; color:#fff; box-shadow:0 3px 10px rgba(147,51,234,.3); }
+  .btn-primary:hover:not([disabled]){ background:#7e22ce; box-shadow:0 4px 14px rgba(147,51,234,.4); }
+  .status-msg{ display:none; margin-bottom: var(--space-3); padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); font-size:13px; font-weight:600; align-items:center; gap:8px; }
+  .status-msg.show{ display:flex; }
+  .status-msg.loading{ background: rgba(147,51,234,.08); color:#7e22ce; border:1px dashed rgba(147,51,234,.25); }
+  .status-msg.error{ background: rgba(220,38,38,.08); color:#b91c1c; border:1px dashed rgba(220,38,38,.3); }
   /* ---------- Footer disclaimer ---------- */
   .page-footer{
     margin-top: var(--space-8); padding-top: var(--space-5);
@@ -284,6 +298,10 @@
       <button class="tab-btn tab-bla" id="tabBlaBtn" role="tab" aria-selected="false" aria-controls="panelBla" tabindex="-1">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="4" width="12" height="17" rx="2"/><rect x="9" y="2" width="6" height="4" rx="1"/><line x1="9" y1="11" x2="15" y2="11"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
         BLO-BLA Minutes
+      </button>
+      <button class="tab-btn tab-epic" id="tabEpicBtn" role="tab" aria-selected="false" aria-controls="panelEpic" tabindex="-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search by EPIC
       </button>
     </div>
   </div>
@@ -412,9 +430,66 @@
         </tbody>
       </table>
     </div>
-    <div class="bla-note">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="8" r="1" fill="currentColor" stroke="none"/></svg>
-      <span><b>"Coming Soon"</b></span>
+    <div class="url-preview" id="blaUrlPreview">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/></svg>
+      <span>Selected AC ka pehla part select hote hi yahan sample download URL dikhega.</span>
+    </div>
+  </section>
+  <!-- ===================== SEARCH BY EPIC TAB ===================== -->
+  <section id="panelEpic" class="card glass tab-panel epic-theme" role="tabpanel" aria-labelledby="tabEpicBtn" tabindex="0" hidden>
+    <div class="section-heading">
+      <span class="icon-badge">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </span>
+      <div>
+        <h2>Search Uncollectable Elector by EPIC</h2>
+        <p>EPIC number se elector ka ASD / uncollectable status check karein.</p>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="field">
+        <label for="epicNumberInput">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="9" x2="17" y2="9"/><line x1="7" y1="13" x2="13" y2="13"/></svg>
+          EPIC Number
+        </label>
+        <input type="text" id="epicNumberInput" class="text-input" placeholder="e.g. XEK0082776" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="epicStateCdInput">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          State Code
+        </label>
+        <input type="text" id="epicStateCdInput" class="text-input" placeholder="e.g. U07 (test data)" autocomplete="off">
+      </div>
+      <div>
+        <button class="btn btn-primary" id="epicSearchBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Search
+        </button>
+      </div>
+    </div>
+    <div class="status-msg" id="epicStatusMsg"></div>
+    <div class="results-meta" id="epicResultsMeta" aria-live="polite"></div>
+    <div class="table-scroll" role="region" aria-label="EPIC search result" tabindex="0">
+      <table>
+        <thead>
+          <tr>
+            <th>EPIC No.</th>
+            <th>Name</th>
+            <th>Relation</th>
+            <th>AC / Part</th>
+            <th>Reason</th>
+          </tr>
+        </thead>
+        <tbody id="epicResultsBody">
+          <tr><td colspan="5">
+            <div class="empty-state">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <div>EPIC number aur State Code daalkar Search karein</div>
+            </div>
+          </td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
   <footer class="page-footer">
@@ -427,8 +502,33 @@
   const CONFIG = {
     year: "2026",
     stateCode: "s28", // Uttarakhand — confirmed
-    lang: "HIN" // sirf Hindi — ECI mail se confirmed
+    lang: "HIN" // sirf Hindi — mail me "ENG" bhi mention tha (format line vs example URL mismatch) — CONFIRM with Ritwik before changing
   };
+  // ---- Search-by-EPIC: calls OUR OWN backend proxy, not ECI directly ----
+  // The secret_key / RSA encryption used to live here in the browser — moved
+  // server-side (see backend-proxy/nodejs or backend-proxy/dotnet) because:
+  //  1) a secret_key in client-side JS is visible to anyone via devtools/network tab.
+  //  2) ECI's gateway is IP-whitelisted to 167.103.5.46 (Uttarakhand SWAN/office
+  //     network) — a public citizen's browser can never call it directly anyway.
+  // Point this at wherever the proxy is deployed. A same-origin relative path
+  // (default below) works if the proxy is reverse-proxied under this same site,
+  // e.g. https://ceo.uk.gov.in/api/search-epic. Change to a full URL if the
+  // proxy is hosted elsewhere.
+  const EPIC_SEARCH_ENDPOINT = '/api/search-epic';
+  async function searchByEpic(epicNumber, stateCd) {
+    const res = await fetch(EPIC_SEARCH_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ epicNumber: epicNumber, stateCd: stateCd })
+    });
+    let data = null;
+    try { data = await res.json(); } catch (_) { /* non-JSON error response, ignore */ }
+    if (!res.ok) {
+      const detail = data && data.error ? data.error : (res.status + ' ' + res.statusText);
+      throw new Error(detail);
+    }
+    return data;
+  }
   // ---- Real master data (from ASDDR_Master_Data_Template.xlsx you filled) ----
   // Shape: { "<District Name>": { acs: [ { no, label, parts: [ {no, name}, ... ] }, ... ] } }
   // 13 districts, 70 ACs, 11,733 parts — full Uttarakhand. Shared by both ASDDR and BLO-BLA Minutes tabs.
@@ -437,9 +537,12 @@
   function buildAsddrUrl(acNo, partNo) {
     return `https://voters.eci.gov.in/eroll/asd/${CONFIG.year}/${CONFIG.stateCode}/${acNo}/uncollectable_elector_report_ac${acNo}_part${partNo}_${CONFIG.lang}.pdf`;
   }
-  // TODO: ECI ne abhi BLO-BLA Minutes ka URL pattern nahi diya hai.
-  // Jaise hi milega, is function ko buildAsddrUrl jaisa hi likh dena — baaki sab (controller/UI) already wired hai.
-  const buildBlaUrl = null;
+  // BLO-BLA MOM URL pattern (confirmed by ECI, Draft Roll Search API):
+  // https://voters.eci.gov.in/eroll/bloblamom/{state_code}/{ac_no}/bloblamom_a{ac_no}p{part_no}.pdf
+  // Sample (test data — only AC-1/Part-1 live so far): https://voters.eci.gov.in/eroll/bloblamom/s24/1/bloblamom_a1p1.pdf
+  function buildBlaUrl(acNo, partNo) {
+    return `https://voters.eci.gov.in/eroll/bloblamom/${CONFIG.stateCode}/${acNo}/bloblamom_a${acNo}p${partNo}.pdf`;
+  }
   const DOWNLOAD_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 19h14"/></svg>';
   const CLOCK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
   // ---- Generic controller: powers one tab's District -> AC -> Part table ----
@@ -542,35 +645,100 @@
     districtSelectId: 'blaDistrictSelect',
     acSelectId: 'blaAcSelect',
     partsBodyId: 'blaPartsBody',
+    urlPreviewId: 'blaUrlPreview',
     resultsMetaId: 'blaResultsMeta',
     viewPollingBtnId: 'blaViewPollingBtn',
     buildUrl: buildBlaUrl
   });
+  // ---- EPIC search tab wiring ----
+  (function initEpicSearch() {
+    const epicInput = document.getElementById('epicNumberInput');
+    const stateInput = document.getElementById('epicStateCdInput');
+    const searchBtn = document.getElementById('epicSearchBtn');
+    const statusMsg = document.getElementById('epicStatusMsg');
+    const resultsMeta = document.getElementById('epicResultsMeta');
+    const resultsBody = document.getElementById('epicResultsBody');
+    // Prefill with the only confirmed-working test example. Uttarakhand's real
+    // stateCd is "S28" (uppercase) but ECI returns 401 for it as of the last
+    // check — switch this to 'S28' once ECI confirms it's enabled.
+    stateInput.value = 'U07';
+
+    function setStatus(kind, text) {
+      statusMsg.className = 'status-msg' + (kind ? ' show ' + kind : '');
+      statusMsg.textContent = text || '';
+    }
+    function emptyRow(msg) {
+      return '<tr><td colspan="5"><div class="empty-state">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' +
+        '<div>' + msg + '</div></div></td></tr>';
+    }
+    function renderResults(rows) {
+      if (!rows || !rows.length) {
+        resultsBody.innerHTML = emptyRow('Koi record nahi mila is EPIC number ke liye');
+        resultsMeta.textContent = '';
+        return;
+      }
+      resultsMeta.innerHTML = '<b>' + rows.length + '</b> record(s) found';
+      resultsBody.innerHTML = rows.map(function (r) {
+        const acPart = (r.acName || '') + ' (AC ' + r.acNo + ') — Part ' + r.partNo + (r.partName ? ' - ' + r.partName : '');
+        const relation = r.relativeName ? (r.relationType || '') + ': ' + r.relativeName : '—';
+        return '<tr>' +
+          '<td>' + (r.epicNumber || '') + '</td>' +
+          '<td>' + (r.name || '') + ' <span style="color:var(--text-400);font-weight:500;">(' + (r.age || '') + (r.gender ? ', ' + r.gender : '') + ')</span></td>' +
+          '<td>' + relation + '</td>' +
+          '<td>' + acPart + '</td>' +
+          '<td>' + (r.uncollectableReasonDesc || '') + '</td>' +
+          '</tr>';
+      }).join('');
+    }
+    async function runSearch() {
+      const epicNumber = epicInput.value.trim();
+      const stateCd = stateInput.value.trim();
+      if (!epicNumber || !stateCd) {
+        setStatus('error', 'EPIC Number aur State Code dono bharein.');
+        return;
+      }
+      searchBtn.disabled = true;
+      setStatus('loading', 'Searching…');
+      resultsBody.innerHTML = emptyRow('Loading…');
+      try {
+        const data = await searchByEpic(epicNumber, stateCd);
+        setStatus('', '');
+        renderResults(Array.isArray(data) ? data : (data ? [data] : []));
+      } catch (err) {
+        console.error('EPIC search failed:', err);
+        setStatus('error', 'Search fail hui: ' + err.message + ' — agar yeh network/CORS error hai to yeh call backend proxy se karni hogi, browser se directly nahi.');
+        resultsBody.innerHTML = emptyRow('Koi result nahi — upar error dekhein');
+      } finally {
+        searchBtn.disabled = false;
+      }
+    }
+    searchBtn.addEventListener('click', runSearch);
+    epicInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') runSearch(); });
+    stateInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') runSearch(); });
+  })();
   // ---- Tab switching (accessible tablist: click + arrow keys) ----
-  const tabAsddrBtn = document.getElementById('tabAsddrBtn');
-  const tabBlaBtn = document.getElementById('tabBlaBtn');
-  const panelAsddr = document.getElementById('panelAsddr');
-  const panelBla = document.getElementById('panelBla');
-  const tabs = [tabAsddrBtn, tabBlaBtn];
-  function showTab(tab) {
-    const isAsddr = tab === 'asddr';
-    tabAsddrBtn.setAttribute('aria-selected', String(isAsddr));
-    tabBlaBtn.setAttribute('aria-selected', String(!isAsddr));
-    tabAsddrBtn.tabIndex = isAsddr ? 0 : -1;
-    tabBlaBtn.tabIndex = isAsddr ? -1 : 0;
-    panelAsddr.hidden = !isAsddr;
-    panelBla.hidden = isAsddr;
+  const TAB_DEFS = [
+    { key: 'asddr', btn: document.getElementById('tabAsddrBtn'), panel: document.getElementById('panelAsddr') },
+    { key: 'bla', btn: document.getElementById('tabBlaBtn'), panel: document.getElementById('panelBla') },
+    { key: 'epic', btn: document.getElementById('tabEpicBtn'), panel: document.getElementById('panelEpic') }
+  ];
+  function showTab(activeKey) {
+    TAB_DEFS.forEach(function (t) {
+      const isActive = t.key === activeKey;
+      t.btn.setAttribute('aria-selected', String(isActive));
+      t.btn.tabIndex = isActive ? 0 : -1;
+      t.panel.hidden = !isActive;
+    });
   }
-  tabAsddrBtn.addEventListener('click', () => showTab('asddr'));
-  tabBlaBtn.addEventListener('click', () => showTab('bla'));
-  tabs.forEach((btn, i) => {
-    btn.addEventListener('keydown', (e) => {
+  TAB_DEFS.forEach(function (t, i) {
+    t.btn.addEventListener('click', function () { showTab(t.key); });
+    t.btn.addEventListener('keydown', function (e) {
       if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
       e.preventDefault();
-      const nextIndex = e.key === 'ArrowRight' ? (i + 1) % tabs.length : (i - 1 + tabs.length) % tabs.length;
-      const nextTab = nextIndex === 0 ? 'asddr' : 'bla';
-      showTab(nextTab);
-      tabs[nextIndex].focus();
+      const nextIndex = e.key === 'ArrowRight' ? (i + 1) % TAB_DEFS.length : (i - 1 + TAB_DEFS.length) % TAB_DEFS.length;
+      showTab(TAB_DEFS[nextIndex].key);
+      TAB_DEFS[nextIndex].btn.focus();
     });
   });
 </script>
